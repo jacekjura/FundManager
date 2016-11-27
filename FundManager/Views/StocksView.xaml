@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="FundManager.Views.StocksView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:FundManager.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:dataGrid="http://schemas.xceed.com/wpf/xaml/datagrid"
+             xmlns:local="clr-namespace:FundManager.Views"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:resx="clr-namespace:FundManager.Resources"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             DataContext="{Binding Main,
+                                   Source={StaticResource Locator}}"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter" />
+        <DataTemplate x:Key="NumericDataTemplate">
+            <TextBlock Text="{Binding ., StringFormat={}{0:n2}}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <dataGrid:DataGridControl AutoCreateColumns="False" ItemsSource="{Binding Stocks}">
+            <dataGrid:DataGridControl.Columns>
+                <!--  Preconfigure the OrderID Column of the grid with CellValidationRule.  -->
+                <dataGrid:Column Title="{x:Static resx:Resource.Type}" FieldName="Type" />
+                <dataGrid:Column Title="{x:Static resx:Resource.Name}" FieldName="HighlightedName">
+                    <dataGrid:Column.CellContentTemplate>
+                        <DataTemplate>
+                            <TextBlock Foreground="{Binding IsHighlighted, Converter={StaticResource BooleanToBrushConverter}}" Text="{Binding Name}" />
+                        </DataTemplate>
+                    </dataGrid:Column.CellContentTemplate>
+                </dataGrid:Column>
+                <dataGrid:Column Title="{x:Static resx:Resource.Price}"
+                                 CellContentTemplate="{StaticResource NumericDataTemplate}"
+                                 FieldName="Price" />
+                <dataGrid:Column Title="{x:Static resx:Resource.Quantity}" FieldName="Quantity" />
+                <dataGrid:Column Title="{x:Static resx:Resource.MarketValue}"
+                                 CellContentTemplate="{StaticResource NumericDataTemplate}"
+                                 FieldName="MarketValue" />
+                <dataGrid:Column Title="{x:Static resx:Resource.TransactionCosts}"
+                                 CellContentTemplate="{StaticResource NumericDataTemplate}"
+                                 FieldName="TransactionCosts" />
+                <dataGrid:Column Title="{x:Static resx:Resource.StockWeight}"
+                                 CellContentTemplate="{StaticResource NumericDataTemplate}"
+                                 FieldName="StockWeight" />
+            </dataGrid:DataGridControl.Columns>
+        </dataGrid:DataGridControl>
+    </Grid>
+</UserControl>
